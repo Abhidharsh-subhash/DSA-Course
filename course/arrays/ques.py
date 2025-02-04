@@ -178,3 +178,112 @@ def remove_duplicates1(arr):
 
 
 print(remove_duplicates([1, 1, 2, 2, 3, 4, 5]))
+
+# Write a function to find all pairs of an integer array whose sum is equal to a given number. Do not consider commutative pairs.
+
+# Example
+
+# pair_sum([2, 4, 3, 5, 6, -2, 4, 7, 8, 9],7)
+# Output : ['2+5', '4+3', '3+4', '-2+9']
+
+
+# Note:
+
+# 4+3 comes from second and third elements from the main list.
+
+# 3+4 comes from third and seventh elements from the main list.
+
+
+# Time complexity O(n)
+def pair_sum(myList, sum):
+    result = []
+    seen = {}
+    used = set()
+    for i, num in enumerate(myList):
+        complement = sum - num
+        if complement in seen:
+            add = (i, seen[complement])
+            if add not in used:
+                used.add(add)
+                result.append(f"{num} + {complement}")
+        seen[num] = i
+    return result
+
+
+print(pair_sum([2, 4, 3, 5, 6, -2, 4, 7, 8, 9], 7))
+
+
+# Time complexity O(n^2)
+def pair_sum1(myList, sum):
+    result = []
+    for i in range(len(myList)):
+        for j in range(i + 1, len(myList)):
+            if myList[i] + myList[j] == sum:
+                result.append(f"{myList[i]}+{myList[j]}")
+    return result
+
+
+print(pair_sum1([2, 4, 3, 5, 6, -2, 4, 7, 8, 9], 7))
+
+
+# Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
+
+# Example :
+
+# Input: nums = [1,2,3,1]
+# Output: true
+
+
+def contains_duplicate(nums):
+    seen = set()
+    for i in nums:
+        if i in seen:
+            return True
+        else:
+            seen.add(i)
+    return False
+
+
+print(contains_duplicate([1, 2, 3, 1]))
+
+
+def permutation(list1, list2):
+    if len(list1) != len(list2):
+        return False
+    list1.sort()
+    list2.sort()
+    if list1 == list2:
+        return True
+    else:
+        return False
+
+
+list1 = [1, 2, 3, 4]
+list2 = [1, 4, 2, 3]
+print(permutation(list1, list2))
+
+# You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
+
+# You have to rotate the image in-place, which means you have to modify the input 2D matrix directly.
+
+# DO NOT allocate another 2D matrix and do the rotation.
+
+# Example:
+
+
+# Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+# Output: [[7,4,1],[8,5,2],[9,6,3]]
+
+
+def rotate(matrix):
+    n = len(matrix)
+    for i in range(n):
+        for j in range(i, n):
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+    for row in matrix:
+        row.reverse()
+    return matrix
+
+
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+print(rotate(matrix))
