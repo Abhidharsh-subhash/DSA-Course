@@ -8,67 +8,61 @@
 # It can be done by changing the color of the grid[0][2].
 
 
-def canMakeSquare(grid) -> bool:
-    count_black_00 = 0
-    count_black_01 = 0
-    count_black_10 = 0
-    count_black_11 = 0
-
+def canMakeSquare(grid):
+    square_00 = 0
+    square_01 = 0
+    square_10 = 0
+    square_11 = 0
     if grid[0][0] == "B":
-        count_black_00 += 1
-
+        square_00 += 1
     if grid[0][1] == "B":
-        count_black_00 += 1
-        count_black_01 += 1
-
+        square_00 += 1
+        square_01 += 1
     if grid[0][2] == "B":
-        count_black_01 += 1
-
+        square_01 += 1
     if grid[1][0] == "B":
-        count_black_00 += 1
-        count_black_10 += 1
-
+        square_00 + 1
+        square_10 == 1
     if grid[1][1] == "B":
-        count_black_10 += 1
-        count_black_11 += 1
-        count_black_00 += 1
-        count_black_01 += 1
-
+        square_10 += 1
+        square_11 += 1
+        square_01 += 1
+        square_00 += 1
     if grid[1][2] == "B":
-        count_black_11 += 1
-        count_black_01 += 1
-
+        square_01 += 1
+        square_11 += 1
     if grid[2][0] == "B":
-        count_black_10 += 1
-
+        square_10 += 1
     if grid[2][1] == "B":
-        count_black_11 += 1
-        count_black_10 += 1
-
+        square_10 += 1
+        square_11 += 1
     if grid[2][2] == "B":
-        count_black_11 += 1
-
-    white_00 = 4 - count_black_00
-    white_01 = 4 - count_black_01
-    white_10 = 4 - count_black_10
-    white_11 = 4 - count_black_11
-
+        square_11 += 1
+    print(square_00, square_01, square_10, square_11)
+    b_square_00 = 4 - square_00
+    b_square_01 = 4 - square_01
+    b_square_10 = 4 - square_10
+    b_square_11 = 4 - square_11
     return 1 in (
-        count_black_00,
-        count_black_01,
-        count_black_10,
-        count_black_11,
-        white_00,
-        white_01,
-        white_10,
-        white_11,
+        square_00,
+        square_01,
+        square_10,
+        square_11,
+        b_square_00,
+        b_square_01,
+        b_square_10,
+        b_square_11,
     ) or 0 in (
-        count_black_00,
-        count_black_01,
-        count_black_10,
-        count_black_11,
-        white_00,
-        white_01,
-        white_10,
-        white_11,
+        square_00,
+        square_01,
+        square_10,
+        square_11,
+        b_square_00,
+        b_square_01,
+        b_square_10,
+        b_square_11,
     )
+
+
+grid = [["B", "W", "B"], ["B", "W", "W"], ["B", "W", "B"]]
+print(canMakeSquare([["B","W","B"],["B","W","W"],["B","W","W"]]))
