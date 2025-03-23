@@ -3,11 +3,11 @@ import numpy as np
 twoDarray = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]])
 print(twoDarray)
 
-print("column insertion")
+print("row insertion")
 newTwoDarray = np.insert(twoDarray, 0, [1, 2, 3, 4], axis=0)
 print(newTwoDarray)
 
-print("row insertion")
+print("column insertion")
 nTwoDarray = np.insert(twoDarray, 1, [10, 20, 30, 40], axis=1)
 print(nTwoDarray)
 
