@@ -21,6 +21,18 @@ class CSLinkedlist:
             self.tail = new_node
         self.length += 1
 
+    def __str__(self):
+        result = ""
+        current = self.head
+        while current.next:
+            result += str(current.value)
+            if current.next != self.head:
+                result += "->"
+            else:
+                break
+            current = current.next
+        return result
+
 
 CS = CSLinkedlist()
 CS.append(10)
@@ -28,3 +40,4 @@ CS.append(20)
 CS.append(30)
 CS.append(40)
 CS.append(50)
+print(CS)

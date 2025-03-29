@@ -35,7 +35,7 @@ accessElement(np_array1, 9)
 def linear_search(array, element):
     for i in range(len(array)):
         if array[i] == element:
-            return i+1
+            return i + 1
     return -1
 
 
