@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 class Animal(ABC):
     @abstractmethod
     def make_sound(self):
-        pass  # This method must be implemented by all subclasses
+        pass  # This method must be implemented by all subclasses(compulsory for child class)
 
 
 # Child Classes

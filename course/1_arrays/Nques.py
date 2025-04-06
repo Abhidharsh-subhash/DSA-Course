@@ -4,6 +4,7 @@ def fibanocci(n):
     for i in range(n):
         print(a, end=" ")
         a, b = b, a + b
+    print("\n")
 
 
 fibanocci(10)

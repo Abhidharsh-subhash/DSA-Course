@@ -26,10 +26,9 @@ class CSLinkedlist:
         current = self.head
         while current.next:
             result += str(current.value)
-            if current.next != self.head:
-                result += "->"
-            else:
+            if current.next == self.head:
                 break
+            result += "->"
             current = current.next
         return result
 
