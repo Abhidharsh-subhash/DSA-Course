@@ -44,6 +44,13 @@ class LinkedList:
             self.tail.next = self.tail = new_node
         return self.tail
 
+    def add_at_start(self, value):
+        new_node = Node(value)
+        if self.head is None:
+            self.head = self.tail = new_node
+        else:
+            new_node.next, self.head = self.head, new_node
+
     # generate linkedlist with length n and with random numbers between min_value and max_value
     def generate(self, n, min_value, max_value):
         for _ in range(n):
