@@ -18,8 +18,8 @@ class PlatesStack:
         length = len(self.stacks)
         if length == 0:
             self.stacks.append([item])
-        elif len(self.stacks[length - 1]) < self.length:
-            self.stacks[length - 1].append(item)
+        elif len(self.stacks[-1]) < self.length:
+            self.stacks[-1].append(item)
         else:
             self.stacks.append([item])
 
@@ -28,10 +28,19 @@ class PlatesStack:
         if length == 0:
             return "empty stack"
         else:
-            self.stacks[length - 1].pop()
-            if len(self.stacks[length-1]) == 0:
+            self.stacks[-1].pop()
+            if len(self.stacks[-1]) == 0:
                 self.stacks.pop()
             return "element popped out"
+
+    def pop_at(self, StackNumber):
+        if len(self.stacks) < StackNumber:
+            return "No such stacks are there"
+        else:
+            self.stacks[StackNumber - 1].pop()
+            if len(self.stacks[StackNumber - 1]) == 0:
+                self.pop(StackNumber - 1)
+            return "element deleted"
 
 
 stack = PlatesStack(3)
@@ -44,10 +53,5 @@ stack.push(80)
 stack.push(83)
 print(stack.pop())
 print(stack.pop())
-print(stack.pop())
-print(stack.pop())
-print(stack.pop())
-print(stack.pop())
-print(stack.pop())
-print(stack.pop())
+print(stack.pop_at(1))
 print(stack)
