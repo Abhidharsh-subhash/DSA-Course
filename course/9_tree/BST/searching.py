@@ -32,34 +32,26 @@ class LinkedList:
         self.head = None
         self.tail = None
 
-    def __iter__(self):
-        current = self.head
-        if current:
-            yield current.value
-            current = current.next
-
 
 class Queue:
     def __init__(self):
         self.queue = LinkedList()
 
-    def __str__(self):
-        result = [str(x) for x in self.queue]
-        return " ".join(result)
-
-    def isEmpty(self):
-        return True if self.queue.head is None else False
-
-    def enqueue(self, new_value):
-        new_node = Node(new_value)
+    def enqueue(self, value):
+        new_node = Node(value)
         if self.queue.head is None:
             self.queue.head = self.queue.tail = new_node
         else:
             self.queue.tail.next = self.queue.tail = new_node
 
-    def dequeue(self):
+    def isEmpty(self):
         if self.queue.head is None:
-            return "Empty Queue"
+            return True
+        return False
+
+    def dequeue(self):
+        if self.isEmpty():
+            return
         elif self.queue.head == self.queue.tail:
             popped_node = self.queue.head
             self.queue.head = self.queue.tail = None
@@ -71,7 +63,7 @@ class Queue:
             return popped_node
 
 
-def Levelorder_Traversal(RootNode):
+def LevelorderTraversal(RootNode):
     if RootNode.data is None:
         return "Empty BST"
     else:
@@ -86,8 +78,28 @@ def Levelorder_Traversal(RootNode):
                 queue.enqueue(root.value.rightchild)
 
 
+def Searching(RootNode, SearchValue):
+    if RootNode.data is None:
+        print("not found")
+    elif RootNode.data == SearchValue:
+        print("found")
+    else:
+        if SearchValue < RootNode.data:
+            if RootNode.leftchild is not None:
+                Searching(RootNode.leftchild, SearchValue)
+            else:
+                return print("not found")
+        elif SearchValue > RootNode.data:
+            if RootNode.rightchild is not None:
+                Searching(RootNode.rightchild, SearchValue)
+            else:
+                return print("not found")
+
+
+# Time Complexity of O(logN) and Space Complexity is also O(logN)
+
+
 NewTree = BSTNode(None)
-print(Levelorder_Traversal(NewTree))
 print(InsertNode(NewTree, 70))
 print(InsertNode(NewTree, 50))
 print(InsertNode(NewTree, 90))
@@ -97,5 +109,5 @@ print(InsertNode(NewTree, 80))
 print(InsertNode(NewTree, 100))
 print(InsertNode(NewTree, 20))
 print(InsertNode(NewTree, 40))
-print("Traversal")
-Levelorder_Traversal(NewTree)
+LevelorderTraversal(NewTree)
+Searching(NewTree, 40)
