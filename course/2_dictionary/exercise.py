@@ -24,7 +24,7 @@ def merge_dicts(dict1, dict2):
     print(result)
 
 
-dict1 = {"a": 1, "b": 2, "c": 3}
+dict1 = {"a": 1, "b": 2, "c": 3, "e": 6}
 dict2 = {"b": 3, "c": 4, "d": 5}
 merge_dicts(dict1, dict2)
 
