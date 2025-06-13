@@ -15,6 +15,7 @@ class StarCookie:
         print("object destroyed")
 
     # Can modify the class state (class attributes), Is called on the class rather than on an instance.
+    # Useful when you want to create factory methods or access class variables
     @classmethod
     def change_quantity(cls, proportion):
         cls.milk = proportion
@@ -58,3 +59,12 @@ print(user1.subscribers)
 print(user1.subsriptions)
 print(user2.subscribers)
 print(user2.subsriptions)
+
+
+# | Feature            | `@classmethod`                     | `@staticmethod`        |
+# | ------------------ | ---------------------------------- | ---------------------- |
+# | First argument     | `cls` (class itself)               | None                   |
+# | Access class state | ✅ Yes                              | ❌ No                   |
+# | Access instance    | ❌ No                               | ❌ No                   |
+# | Typical use        | Factory methods, access class vars | Utility/helper methods |
+# | Belongs to         | Class                              | Class                  |
