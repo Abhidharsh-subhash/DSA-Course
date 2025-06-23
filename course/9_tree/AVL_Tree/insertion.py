@@ -1,5 +1,5 @@
 class Node:
-    def __init___(self, value):
+    def __init__(self, value):
         self.value = value
         self.next = None
 
@@ -36,7 +36,7 @@ class Queue:
             self.linkedlist.head = self.linkedlist.tail = new_node
         else:
             self.linkedlist.tail.next = self.linkedlist.tail = new_node
-        self.length += 1
+        self.linkedlist.length += 1
 
     def dequeue(self):
         if self.linkedlist.head is None:
@@ -44,12 +44,12 @@ class Queue:
         elif self.linkedlist.head == self.linkedlist.tail:
             popped_node = self.linkedlist.head
             self.linkedlist.head = self.linkedlist.tail = None
-            self.length -= 1
+            self.linkedlist.length -= 1
             return popped_node
         else:
             popped_node = self.linkedlist.head
             self.linkedlist.head = self.linkedlist.head.next
-            self.length -= 1
+            self.linkedlist.length -= 1
             return popped_node
 
 
@@ -111,8 +111,7 @@ def insertNode(RootNode, NodeValue):
     RootNode.height = 1 + max(
         getHeight(RootNode.leftchild), getHeight(RootNode.rightchild)
     )
-    balance = getHeight(RootNode)
-    breakpoint()
+    balance = getBalance(RootNode)
     # LL
     if balance > 1 and NodeValue < RootNode.leftchild.data:
         return rightRotate(RootNode)
@@ -122,7 +121,7 @@ def insertNode(RootNode, NodeValue):
         return rightRotate(RootNode)
     # RR
     if balance < -1 and NodeValue > RootNode.rightchild.data:
-        return leftRotate(NodeValue)
+        return leftRotate(RootNode)
     # RL
     if balance < -1 and NodeValue < RootNode.rightchild.data:
         RootNode.rightchild = rightRotate(RootNode.rightchild)
@@ -130,8 +129,27 @@ def insertNode(RootNode, NodeValue):
     return RootNode
 
 
+def LevelOrderTraversal(RootNode):
+    if not RootNode:
+        return
+    else:
+        tracking = Queue()
+        tracking.enqueue(RootNode)
+        while not tracking.isEmpty():
+            root = tracking.dequeue()
+            print(root.value.data)
+            if root.value.leftchild is not None:
+                tracking.enqueue(root.value.leftchild)
+            if root.value.rightchild is not None:
+                tracking.enqueue(root.value.rightchild)
+
+
 new_AVL = AVL_Node(5)
 new_AVL = insertNode(new_AVL, 10)
 new_AVL = insertNode(new_AVL, 20)
 new_AVL = insertNode(new_AVL, 30)
 new_AVL = insertNode(new_AVL, 40)
+new_AVL = insertNode(new_AVL, 50)
+new_AVL = insertNode(new_AVL, 60)
+new_AVL = insertNode(new_AVL, 70)
+LevelOrderTraversal(new_AVL)
