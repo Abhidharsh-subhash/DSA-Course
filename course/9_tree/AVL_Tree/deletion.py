@@ -153,10 +153,10 @@ def DeleteNode(RootNode, NodeValue):
         RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
     else:
         if RootNode.leftchild is None:
-            temp = RootNode.rightchild
-            RootNode = None
-            return temp
-        elif RootNode.rightchid is None:
+            temp = RootNode.rightchild  # Save the right child
+            RootNode = None             # Delete the current node
+            return temp                 # Return right child to be attached to parent
+        elif RootNode.rightchild is None:
             temp = RootNode.leftchild
             RootNode = None
             return temp
