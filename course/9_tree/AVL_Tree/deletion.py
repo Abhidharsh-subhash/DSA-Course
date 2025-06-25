@@ -26,19 +26,17 @@ class Queue:
         return " ".join(result)
 
     def isEmpty(self):
-        if self.linkedlist.length == 0:
-            return True
-        return False
+        return True if self.linkedlist.head is None else False
 
-    def enqueue(self, NodeValue):
-        new_node = Node(NodeValue)
+    def Enqueue(self, NodeValue):
+        New_Node = Node(NodeValue)
         if self.isEmpty():
-            self.linkedlist.head = self.linkedlist.tail = new_node
+            self.linkedlist.head = self.linkedlist.tail = New_Node
         else:
-            self.linkedlist.tail.next = self.linkedlist.tail = new_node
+            self.linkedlist.tail.next = self.linkedlist.tail = New_Node
         self.linkedlist.length += 1
 
-    def dequeue(self):
+    def Dequeue(self):
         if self.isEmpty():
             return
         elif self.linkedlist.head == self.linkedlist.tail:
@@ -61,26 +59,39 @@ class AVL_Node:
         self.height = 1
 
 
-def GetHeight(RootNode):
+def LevelorderTraversal(RootNode):
     if not RootNode:
-        return 0
+        return
     else:
-        return RootNode.height
+        tracking = Queue()
+        tracking.Enqueue(RootNode)
+        while not tracking.isEmpty():
+            root = tracking.Dequeue()
+            print(root.value.data)
+            if root.value.leftchild is not None:
+                tracking.Enqueue(root.value.leftchild)
+            if root.value.rightchild is not None:
+                tracking.Enqueue(root.value.rightchild)
+
+
+def GetHeight(RootNode):
+    return 0 if not RootNode else RootNode.height
 
 
 def GetBalance(RootNode):
-    if not RootNode:
-        return 0
-    else:
-        return GetHeight(RootNode.leftchild) - GetHeight(RootNode.rightchild)
+    return (
+        0
+        if not RootNode
+        else GetHeight(RootNode.leftchild) - GetHeight(RootNode.rightchild)
+    )
 
 
-def RightRotate(DislabancedNode):
-    NewRoot = DislabancedNode.leftchild
-    DislabancedNode.leftchild = DislabancedNode.leftchild.rightchild
-    NewRoot.rightchild = DislabancedNode
-    DislabancedNode.height = 1 + max(
-        GetHeight(DislabancedNode.leftchild), GetHeight(DislabancedNode.rightchild)
+def RightRotate(DisbalancedNode):
+    NewRoot = DisbalancedNode.leftchild
+    DisbalancedNode.leftchild = DisbalancedNode.leftchild.rightchild
+    NewRoot.rightchild = DisbalancedNode
+    DisbalancedNode.height = 1 + max(
+        GetHeight(DisbalancedNode.leftchild), GetHeight(DisbalancedNode.rightchild)
     )
     NewRoot.height = 1 + max(
         GetHeight(NewRoot.leftchild), GetHeight(NewRoot.rightchild)
@@ -88,12 +99,12 @@ def RightRotate(DislabancedNode):
     return NewRoot
 
 
-def LeftRotate(DislabancedNode):
-    NewRoot = DislabancedNode.rightchild
-    DislabancedNode.rightchild = DislabancedNode.rightchild.leftchild
-    NewRoot.leftchild = DislabancedNode
-    DislabancedNode.height = 1 + max(
-        GetHeight(DislabancedNode.leftchild), GetHeight(DislabancedNode.rightchild)
+def LeftRotate(DisbalancedNode):
+    NewRoot = DisbalancedNode.rightchild
+    DisbalancedNode.rightchild = DisbalancedNode.rightchild.leftchild
+    NewRoot.leftchild = DisbalancedNode
+    DisbalancedNode.height = 1 + max(
+        GetHeight(DisbalancedNode.leftchild), GetHeight(DisbalancedNode.rightchild)
     )
     NewRoot.height = 1 + max(
         GetHeight(NewRoot.leftchild), GetHeight(NewRoot.rightchild)
@@ -115,29 +126,14 @@ def InsertNode(RootNode, NodeValue):
     if balance > 1 and NodeValue < RootNode.leftchild.data:
         return RightRotate(RootNode)
     if balance > 1 and NodeValue > RootNode.leftchild.data:
-        RootNode.leftchild = LeftRotate(RootNode.leftchild)
+        RootNode.leftchild = LeftRotate(RootNode.lefthcild)
         return RightRotate(RootNode)
+    if balance < -1 and NodeValue > RootNode.rightchild.data:
+        return LeftRotate(RootNode)
     if balance < -1 and NodeValue < RootNode.rightchild.data:
         RootNode.rightchild = RightRotate(RootNode.rightchild)
         return LeftRotate(RootNode)
-    if balance < -1 and NodeValue > RootNode.rightchild.data:
-        return LeftRotate(RootNode)
     return RootNode
-
-
-def LevelorderTraversal(RootNode):
-    if not RootNode:
-        return
-    else:
-        tracking = Queue()
-        tracking.enqueue(RootNode)
-        while not tracking.isEmpty():
-            root = tracking.dequeue()
-            print(root.value.data)
-            if root.value.leftchild is not None:
-                tracking.enqueue(root.value.leftchild)
-            if root.value.rightchild is not None:
-                tracking.enqueue(root.value.rightchild)
 
 
 New_AVL = AVL_Node(5)
@@ -148,4 +144,5 @@ New_AVL = InsertNode(New_AVL, 40)
 New_AVL = InsertNode(New_AVL, 50)
 New_AVL = InsertNode(New_AVL, 60)
 New_AVL = InsertNode(New_AVL, 70)
+New_AVL = InsertNode(New_AVL, 80)
 LevelorderTraversal(New_AVL)
