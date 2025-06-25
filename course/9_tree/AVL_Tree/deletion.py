@@ -136,6 +136,36 @@ def InsertNode(RootNode, NodeValue):
     return RootNode
 
 
+# Get minimum value from right subtree(successor)
+def GetMinValueNode(RootNode):
+    if RootNode is None or RootNode.leftchild is None:
+        return RootNode
+    else:
+        return GetMinValueNode(RootNode.leftchild)
+
+
+def DeleteNode(RootNode, NodeValue):
+    if not RootNode:
+        return RootNode
+    elif NodeValue < RootNode.data:
+        RootNode.leftchild = DeleteNode(RootNode.leftchild, NodeValue)
+    elif NodeValue > RootNode.data:
+        RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
+    else:
+        if RootNode.leftchild is None:
+            temp = RootNode.rightchild
+            RootNode = None
+            return temp
+        elif RootNode.rightchid is None:
+            temp = RootNode.leftchild
+            RootNode = None
+            return temp
+        else:
+            temp = GetMinValueNode(RootNode.rightchild)
+            RootNode.data = temp.data
+            RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
+
+
 New_AVL = AVL_Node(5)
 New_AVL = InsertNode(New_AVL, 10)
 New_AVL = InsertNode(New_AVL, 20)
@@ -144,5 +174,4 @@ New_AVL = InsertNode(New_AVL, 40)
 New_AVL = InsertNode(New_AVL, 50)
 New_AVL = InsertNode(New_AVL, 60)
 New_AVL = InsertNode(New_AVL, 70)
-New_AVL = InsertNode(New_AVL, 80)
 LevelorderTraversal(New_AVL)
