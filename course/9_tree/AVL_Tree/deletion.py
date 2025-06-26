@@ -154,8 +154,8 @@ def DeleteNode(RootNode, NodeValue):
     else:
         if RootNode.leftchild is None:
             temp = RootNode.rightchild  # Save the right child
-            RootNode = None             # Delete the current node
-            return temp                 # Return right child to be attached to parent
+            RootNode = None  # Delete the current node
+            return temp  # Return right child to be attached to parent
         elif RootNode.rightchild is None:
             temp = RootNode.leftchild
             RootNode = None
@@ -163,7 +163,26 @@ def DeleteNode(RootNode, NodeValue):
         else:
             temp = GetMinValueNode(RootNode.rightchild)
             RootNode.data = temp.data
-            RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
+            RootNode.rightchild = DeleteNode(RootNode.rightchild, temp.data)
+    RootNode.height = 1 + max(
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
+    )
+    balance = GetBalance(RootNode)
+    # LL
+    if balance > 1 and GetBalance(RootNode.leftchild) >= 0:
+        return RightRotate(RootNode)
+    # RR
+    if balance < -1 and GetBalance(RootNode.rightchild) <= 0:
+        return LeftRotate(RootNode)
+    # LR
+    if balance > 1 and GetBalance(RootNode.leftchild) < 0:
+        RootNode.leftchild = LeftRotate(RootNode.leftchild)
+        return RightRotate(RootNode)
+    # RL
+    if balance < -1 and GetBalance(RootNode.rightchild) > 0:
+        RootNode.rightchild = RightRotate(RootNode.rightchild)
+        return LeftRotate(RootNode)
+    return RootNode
 
 
 New_AVL = AVL_Node(5)
@@ -174,4 +193,8 @@ New_AVL = InsertNode(New_AVL, 40)
 New_AVL = InsertNode(New_AVL, 50)
 New_AVL = InsertNode(New_AVL, 60)
 New_AVL = InsertNode(New_AVL, 70)
+print("Levelorder Traversal")
+LevelorderTraversal(New_AVL)
+New_AVL = DeleteNode(New_AVL, 40)
+print("Levelorder Traversal")
 LevelorderTraversal(New_AVL)
