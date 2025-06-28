@@ -148,6 +148,54 @@ def Searching(RootNode, SearchNode):
             Searching(RootNode.rightchild, SearchNode)
 
 
+def GetMinValue(RootNode):
+    if not RootNode or RootNode.leftchild is None:
+        return RootNode
+    else:
+        return GetMinValue(RootNode.leftchild)
+
+
+def DeleteNode(RootNode, NodeValue):
+    if not RootNode:
+        return RootNode
+    elif NodeValue < RootNode.data:
+        RootNode.leftchild = DeleteNode(RootNode.leftchild, NodeValue)
+    elif NodeValue > RootNode.data:
+        RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
+    else:
+        if RootNode.leftchild is None:
+            temp = RootNode.rightchild
+            RootNode = None
+            return temp
+        elif RootNode.rightchild is None:
+            temp = RootNode.leftchild
+            RootNode = None
+            return temp
+        else:
+            temp = GetMinValue(RootNode.leftchild)
+            RootNode.data = temp.data
+            RootNode.rightchild = DeleteNode(RootNode.rightchild, temp.data)
+    RootNode.height = 1 + max(
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
+    )
+    balance = GetBalance(RootNode)
+    # ll
+    if balance > 1 and GetBalance(RootNode.leftchild) >= 0:
+        return RightRotate(RootNode)
+    # lr
+    if balance > 1 and GetBalance(RootNode.leftchild) < 0:
+        RootNode.leftchild = LeftRotate(RootNode.leftchild)
+        return RightRotate(RootNode)
+    # rr
+    if balance < -1 and GetBalance(RootNode.rightchild) <= 0:
+        return LeftRotate(RootNode)
+    # rl
+    if balance < -1 and GetBalance(RootNode.rightchild) > 0:
+        RootNode.rightchild = RightRotate(RootNode.rightchild)
+        return LeftRotate(RootNode)
+    return RootNode
+
+
 new_AVL = AVL_Node(5)
 new_AVL = InsertNode(new_AVL, 10)
 new_AVL = InsertNode(new_AVL, 20)
@@ -159,3 +207,7 @@ new_AVL = InsertNode(new_AVL, 70)
 LevelorderTraversal(new_AVL)
 print("searching")
 Searching(new_AVL, 80)
+DeleteNode(new_AVL, 20)
+DeleteNode(new_AVL, 5)
+print("traversing after deletion")
+LevelorderTraversal(new_AVL)
