@@ -13,7 +13,7 @@ class LinkedList:
     def __iter__(self):
         current = self.head
         while current:
-            yield current.value
+            yield current.data
             current = current.next
 
 
@@ -28,12 +28,12 @@ class Queue:
     def IsEmpty(self):
         return True if self.linkedlist.head is None else False
 
-    def Enqueue(self, NodeValue):
-        NewNode = Node(NodeValue)
+    def Enqueue(self, data):
+        New_Node = Node(data)
         if self.IsEmpty():
-            self.linkedlist.head = self.linkedlist.tail = NewNode
+            self.linkedlist.head = self.linkedlist.tail = New_Node
         else:
-            self.linkedlist.tail.next = self.linkedlist.tail = NewNode
+            self.linkedlist.tail.next = self.linkedlist.tail = New_Node
         self.linkedlist.length += 1
 
     def Dequeue(self):
@@ -42,12 +42,10 @@ class Queue:
         elif self.linkedlist.head == self.linkedlist.tail:
             popped_node = self.linkedlist.head
             self.linkedlist.head = self.linkedlist.tail = None
-            self.linkedlist.length -= 1
             return popped_node
         else:
             popped_node = self.linkedlist.head
             self.linkedlist.head = self.linkedlist.head.next
-            self.linkedlist.length -= 1
             return popped_node
 
 
@@ -71,28 +69,28 @@ def GetBalance(RootNode):
     )
 
 
-def LeftRotate(DisbalancedNode):
-    NewRoot = DisbalancedNode.rightchild
-    DisbalancedNode.rightchild = DisbalancedNode.rightchild.leftchild
-    NewRoot.leftchild = DisbalancedNode
-    DisbalancedNode.height = 1 + max(
-        GetHeight(DisbalancedNode.leftchild), GetHeight(DisbalancedNode.rightchild)
+def RightRotate(RootNode):
+    NewRoot = RootNode.leftchild
+    RootNode.leftchild = RootNode.leftchild.rightchild
+    NewRoot.rightchild = RootNode
+    RootNode.height = 1 + max(
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
     )
     NewRoot.height = 1 + max(
-        GetHeight(NewRoot.leftchild), GetHeight(NewRoot.rightchild)
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
     )
     return NewRoot
 
 
-def RightRotate(DisbalancedNode):
-    NewRoot = DisbalancedNode.leftchild
-    DisbalancedNode.leftchild = DisbalancedNode.leftchild.rightchild
-    NewRoot.rightchild = DisbalancedNode
-    DisbalancedNode.height = 1 + max(
-        GetHeight(DisbalancedNode.leftchild), GetHeight(DisbalancedNode.rightchild)
+def LeftRotate(RootNode):
+    NewRoot = RootNode.rightchild
+    RootNode.rightchild = RootNode.rightchild.leftchild
+    NewRoot.leftchild = RootNode
+    RootNode.height = 1 + max(
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
     )
     NewRoot.height = 1 + max(
-        GetHeight(NewRoot.leftchild), GetHeight(NewRoot.rightchild)
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
     )
     return NewRoot
 
@@ -111,11 +109,55 @@ def InsertNode(RootNode, NodeValue):
     if balance > 1 and NodeValue < RootNode.leftchild.data:
         return RightRotate(RootNode)
     if balance > 1 and NodeValue > RootNode.leftchild.data:
-        RootNode.leftchild = LeftRotate(RootNode.leftchild)
+        RootNode.rightchild = LeftRotate(RootNode.rightchild)
         return RightRotate(RootNode)
     if balance < -1 and NodeValue > RootNode.rightchild.data:
         return LeftRotate(RootNode)
     if balance < -1 and NodeValue < RootNode.rightchild.data:
+        RootNode.rightchild = RightRotate(RootNode.rightchild)
+        return LeftRotate(RootNode)
+    return RootNode
+
+
+def GetSuccessor(RootNode):
+    if not RootNode or RootNode.leftchild is None:
+        return RootNode
+    else:
+        GetSuccessor(RootNode.leftchild)
+
+
+def DeleteNode(RootNode, NodeValue):
+    if not RootNode:
+        return
+    elif NodeValue < RootNode.data:
+        RootNode.leftchild = DeleteNode(RootNode.leftchild, NodeValue)
+    elif NodeValue > RootNode.data:
+        RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
+    else:
+        if RootNode.leftchild is None:
+            temp = RootNode.rightchild
+            RootNode = None
+            return temp
+        elif RootNode.rightchild is None:
+            temp = RootNode.leftchild
+            RootNode = None
+            return temp
+        else:
+            temp = GetSuccessor(RootNode.rightchild)
+            RootNode.data = temp.data
+            RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
+    RootNode.height = 1 + max(
+        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
+    )
+    balance = GetBalance(RootNode)
+    if balance > 1 and GetBalance(RootNode.leftchild) >= 0:
+        return RightRotate(RootNode)
+    if balance > 1 and GetBalance(RootNode.leftchild) < 0:
+        RootNode.leftchild = LeftRotate(RootNode.leftchild)
+        return RightRotate(RootNode)
+    if balance < -1 and GetBalance(RootNode.rightchild) <= 0:
+        return LeftRotate(RootNode)
+    if balance < -1 and GetBalance(RootNode.rightchild) > 0:
         RootNode.rightchild = RightRotate(RootNode.rightchild)
         return LeftRotate(RootNode)
     return RootNode
@@ -136,78 +178,17 @@ def LevelorderTraversal(RootNode):
                 tracking.Enqueue(root.value.rightchild)
 
 
-def Searching(RootNode, SearchNode):
-    if not RootNode:
-        print(False)
-    elif RootNode.data == SearchNode:
-        print(True)
-    else:
-        if SearchNode < RootNode.data:
-            Searching(RootNode.leftchild, SearchNode)
-        elif SearchNode > RootNode.data:
-            Searching(RootNode.rightchild, SearchNode)
-
-
-def GetMinValue(RootNode):
-    if not RootNode or RootNode.leftchild is None:
-        return RootNode
-    else:
-        return GetMinValue(RootNode.leftchild)
-
-
-def DeleteNode(RootNode, NodeValue):
-    if not RootNode:
-        return RootNode
-    elif NodeValue < RootNode.data:
-        RootNode.leftchild = DeleteNode(RootNode.leftchild, NodeValue)
-    elif NodeValue > RootNode.data:
-        RootNode.rightchild = DeleteNode(RootNode.rightchild, NodeValue)
-    else:
-        if RootNode.leftchild is None:
-            temp = RootNode.rightchild
-            RootNode = None
-            return temp
-        elif RootNode.rightchild is None:
-            temp = RootNode.leftchild
-            RootNode = None
-            return temp
-        else:
-            temp = GetMinValue(RootNode.leftchild)
-            RootNode.data = temp.data
-            RootNode.rightchild = DeleteNode(RootNode.rightchild, temp.data)
-    RootNode.height = 1 + max(
-        GetHeight(RootNode.leftchild), GetHeight(RootNode.rightchild)
-    )
-    balance = GetBalance(RootNode)
-    # ll
-    if balance > 1 and GetBalance(RootNode.leftchild) >= 0:
-        return RightRotate(RootNode)
-    # lr
-    if balance > 1 and GetBalance(RootNode.leftchild) < 0:
-        RootNode.leftchild = LeftRotate(RootNode.leftchild)
-        return RightRotate(RootNode)
-    # rr
-    if balance < -1 and GetBalance(RootNode.rightchild) <= 0:
-        return LeftRotate(RootNode)
-    # rl
-    if balance < -1 and GetBalance(RootNode.rightchild) > 0:
-        RootNode.rightchild = RightRotate(RootNode.rightchild)
-        return LeftRotate(RootNode)
-    return RootNode
-
-
-new_AVL = AVL_Node(5)
-new_AVL = InsertNode(new_AVL, 10)
-new_AVL = InsertNode(new_AVL, 20)
-new_AVL = InsertNode(new_AVL, 30)
-new_AVL = InsertNode(new_AVL, 40)
-new_AVL = InsertNode(new_AVL, 50)
-new_AVL = InsertNode(new_AVL, 60)
-new_AVL = InsertNode(new_AVL, 70)
-LevelorderTraversal(new_AVL)
-print("searching")
-Searching(new_AVL, 80)
-DeleteNode(new_AVL, 20)
-DeleteNode(new_AVL, 5)
-print("traversing after deletion")
-LevelorderTraversal(new_AVL)
+New_AVL = AVL_Node(5)
+New_AVL = InsertNode(New_AVL, 10)
+New_AVL = InsertNode(New_AVL, 20)
+New_AVL = InsertNode(New_AVL, 30)
+New_AVL = InsertNode(New_AVL, 40)
+New_AVL = InsertNode(New_AVL, 50)
+New_AVL = InsertNode(New_AVL, 60)
+New_AVL = InsertNode(New_AVL, 70)
+print("Levelorder Traversal")
+LevelorderTraversal(New_AVL)
+New_AVL = DeleteNode(New_AVL, 60)
+New_AVL = DeleteNode(New_AVL, 70)
+print("after deletion")
+LevelorderTraversal(New_AVL)
