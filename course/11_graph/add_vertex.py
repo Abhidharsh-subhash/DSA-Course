@@ -9,10 +9,6 @@ class Graph:
         else:
             return "Vertex already exist"
 
-    def addedge(self, vertex, edge):
-        self.gdict.get(vertex).append(edge)
-        return "edge added successfully"
-
     def __str__(self):
         return str(self.gdict)
 
