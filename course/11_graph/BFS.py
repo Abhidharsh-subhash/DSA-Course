@@ -62,14 +62,15 @@ class Graph:
             print(f"{vertex}: {edge}")
 
     def bfs(self, vertex):
-        visited = [vertex]
+        visited = set()
+        visited.add(vertex)
         queue = [vertex]
         while queue:
             current = queue.pop(0)
             print(current)
             for edge in self.adjacency_list[current]:
                 if edge not in visited:
-                    visited.append(edge)
+                    visited.add(edge)
                     queue.append(edge)
         return
 
