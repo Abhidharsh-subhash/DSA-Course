@@ -9,9 +9,14 @@ class Node:
     def __init__(self, name):
         self.name = name
         self.visited = False
+        # previous node where we come to this node
         self.predecessor = None
         self.neighbours = []
         self.min_distance = float("inf")
 
     def __lt__(self, other_vertex):
         return self.min_distance < other_vertex.min_distance
+
+    def addEdge(self, weight, desination_vertex):
+        edge = Edge(weight, self, desination_vertex)
+        self.neighbours.append(edge)
